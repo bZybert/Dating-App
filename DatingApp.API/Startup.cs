@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace DatingApp.API
 {
@@ -45,6 +48,23 @@ namespace DatingApp.API
             // we must specify the interface what we want to use -> IAuthRepository
             // and implementation of this interface -> AuthRepository
             services.AddScoped<IAuthRepository, AuthRepository>();
+
+            // adding authentication type
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+
+                    //Configuration.GetSection("AppSettings:Token").Value) is string
+                    //Encoding.ASCII.GetBytes change string to byte[]
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+
+                    ValidateIssuer = false,
+
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +88,8 @@ namespace DatingApp.API
                                builder.WithOrigins("http://localhost:4200").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
                  */       // setting cors access , gdzie po stronie angulara będą dostępne zapytania
                           // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
