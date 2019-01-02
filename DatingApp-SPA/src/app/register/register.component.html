@@ -1,0 +1,34 @@
+<!-- '#' -template form, when submit the form use method register-->
+<form #registerForm="ngForm" (ngSubmit)="register()">
+  <h2 class="text-center text-primary">Sign Up</h2>
+  <hr />
+
+  <div class="form-group">
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      [(ngModel)]="model.name"
+      required
+      placeholder="Username"
+    />
+  </div>
+
+  <div class="form-group">
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      [(ngModel)]="model.password"
+      required
+      placeholder="Password"
+    />
+  </div>
+
+  <div class="form-group text-center">
+    <button class="btn btn-success" type="submit">Register</button>
+    <button class="btn btn-default" (click)="cancel()" type="button">
+      Cancel
+    </button>
+  </div>
+</form>
