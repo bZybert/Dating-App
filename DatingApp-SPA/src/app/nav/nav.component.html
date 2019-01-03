@@ -11,7 +11,7 @@
   <!-- * structure directive , can change DOM
   if loggedIn() is true show this div-->
   <div *ngIf="loggedIn()" class="dropdown">
-    <a class="btn dropdown-toggle text-light"> Welcome User </a>
+    <a class="btn dropdown-toggle text-light"> Welcome {{authService.decodedToken.unique_name}} </a>
 
     <div class="dropdown-menu">
       <a class="dropdown-item" href="#"><i class="fa fa-user"></i>Edit</a>
