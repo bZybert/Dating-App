@@ -1,59 +1,71 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Dating App</a>
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Dating App</a>
 
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item active"><a class="nav-link" href="#">Matches</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">List</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
-    <li class="nav-item"><a class="nav-link" (click)="logout()">Logout</a></li>
-  </ul>
+    <!--
+        if loggedIn() is true show this div
+    -->
+    <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
+      <li class="nav-item active"><a class="nav-link" href="#">Matches</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">List</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+    </ul>
 
-  <!-- * structure directive , can change DOM
-  if loggedIn() is true show this div-->
-  <div *ngIf="loggedIn()" class="dropdown">
-    <a class="btn dropdown-toggle text-light"> Welcome {{authService.decodedToken.unique_name}} </a>
-
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-user"></i>Edit</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i>Logout</a>
+    <!-- * structure directive , can change DOM
+  if loggedIn() is true show this div
+  {{authService.decodedToken?.unique_name}}  - sending to view legged user name
+  ? -makes it optional, there isn't error in console when it's undefined (user logout)-->
+    <div *ngIf="loggedIn()" class="dropdown" dropdown>
+      <a class="btn dropdown-toggle text-light" dropdownToggle>
+        Welcome {{ authService.decodedToken?.unique_name | titlecase }}
+      </a>
+      <!-- 
+  dropdown, dropdownToggle, *dropdownMenu  - bgx bootstrap commands instead default jquery 
+-->
+      <div class="dropdown-menu mt-3" *dropdownMenu>
+        <a class="dropdown-item" href="#"><i class="fa fa-user"></i>Edit</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()"
+          ><i class="fa fa-sign-out"></i>Logout</a
+        >
+      </div>
     </div>
-  </div>
 
-  <!-- '#' template form 
+    <!-- '#' template form 
   #loginForm -template reference variable 
   (ngSubmit)="login()"  - adding to submit action login() function from nav component -
   if loggedIn() is false show this directive -->
-  <form
-    *ngIf="!loggedIn()"
-    #loginForm="ngForm"
-    class="form-inline my-2 my-lg-0"
-    (ngSubmit)="login()"
-  >
-    <!-- [(ngModel)]="model.name"  -- binding name value -->
-    <input
-      class="form-control mr-sm-2"
-      type="text"
-      placeholder="Name"
-      required
-      name="name"
-      [(ngModel)]="model.name"
-    />
-    <input
-      class="form-control mr-sm-2"
-      type="password"
-      placeholder="Password"
-      required
-      name="password"
-      [(ngModel)]="model.password"
-    />
-    <!--[disabled]="!loginForm"  -- button will be disabled until required field will be fill and loginForm is valid-->
-    <button
-      [disabled]="!loginForm.valid"
-      class="btn btn-success my-2 my-sm-0"
-      type="submit"
+    <form
+      *ngIf="!loggedIn()"
+      #loginForm="ngForm"
+      class="form-inline my-2 my-lg-0"
+      (ngSubmit)="login()"
     >
-      Login
-    </button>
-  </form>
+      <!-- [(ngModel)]="model.name"  -- binding name value -->
+      <input
+        class="form-control mr-sm-2"
+        type="text"
+        placeholder="Name"
+        required
+        name="name"
+        [(ngModel)]="model.name"
+      />
+      <input
+        class="form-control mr-sm-2"
+        type="password"
+        placeholder="Password"
+        required
+        name="password"
+        [(ngModel)]="model.password"
+      />
+      <!--[disabled]="!loginForm"  -- button will be disabled until required field will be fill and loginForm is valid-->
+      <button
+        [disabled]="!loginForm.valid"
+        class="btn btn-success my-2 my-sm-0"
+        type="submit"
+      >
+        Login
+      </button>
+    </form>
+  </div>
 </nav>

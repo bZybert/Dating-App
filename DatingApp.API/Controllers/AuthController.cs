@@ -68,7 +68,7 @@ namespace DatingApp.API.Controllers
             //creating token for user
             var claims = new[]{
                 // for user id
-                    new Claim(ClaimTypes.NameIdentifier, userFromRepo.Name.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
 
                 // for user name
                     new Claim(ClaimTypes.Name, userFromRepo.Name)
