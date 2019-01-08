@@ -20,6 +20,7 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using DatingApp.API.Helpers;
+using AutoMapper;
 
 namespace DatingApp.API
 {
@@ -37,8 +38,9 @@ namespace DatingApp.API
         {
             // adding our DataContext, to have possibility use it in controllers constructor
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //needed for sharing resourses for angular in front 
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions( opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;});
+
+            //needed for sharing resourses from our backend api to angular in front 
             services.AddCors(options =>
                 {
                     options.AddPolicy("AllowSpecificOrigin",
@@ -47,11 +49,20 @@ namespace DatingApp.API
                                            .AllowAnyMethod());
                 });
 
+            //adding automapper
+            services.AddAutoMapper();
+
+            // adding our class with custom users
+            services.AddTransient<Seed>();
+
             // addScoped create instance for each Http request
             // but uses the same instance in other cors what is in the same web request 
             // we must specify the interface what we want to use -> IAuthRepository
             // and implementation of this interface -> AuthRepository
             services.AddScoped<IAuthRepository, AuthRepository>();
+
+            // as above
+            services.AddScoped<IDatingRepository, DatingRepository>();
 
             // adding authentication type
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -72,7 +83,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -104,6 +115,10 @@ namespace DatingApp.API
 
 
             //  app.UseHttpsRedirection();
+
+            // when application will start this automatically add our custom users and populate database
+            //seeder.SeedUsers();
+
             app.UseCors("AllowSpecificOrigin");
             /* 
                         app.UseCors(builder =>
