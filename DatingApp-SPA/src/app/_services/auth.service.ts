@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
 
 /**@Injectable means that services can be injected*/
 @Injectable({
@@ -10,8 +11,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   also we need add AuthService to app.module.ts in providers section*/
 })
 export class AuthService {
-  /** url from backend with our users */
-baseUrl = 'http://localhost:5000/api/auth/';
+  /** url from backend with our users (set in environments/environments.ts)*/
+baseUrl = environment.apiUrl + 'auth/';
 
 /** @auth0 Helper library for handling JWTs in Angular 2+ app */
 jwtHelper = new JwtHelperService();
