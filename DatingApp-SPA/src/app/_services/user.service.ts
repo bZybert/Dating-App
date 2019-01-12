@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 
 
-// setting manualy header for token request
+// setting manually header for token request
 /**
 const httpOptions = {
   headers: new HttpHeaders({
@@ -33,6 +33,10 @@ getUsers(): Observable<User[]> {
 
 getUser(id): Observable<User> {
   return this.http.get<User>(this.baseUrl + 'users/' + id);
+}
+
+updateUser(id: number, user: User) {
+  return this.http.put(this.baseUrl + 'users/' + id, user);
 }
 
 }

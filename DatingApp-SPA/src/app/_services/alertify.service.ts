@@ -4,6 +4,9 @@ declare let alertify: any;
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * third part library for displaying information for user in popup box
+ */
 export class AlertifyService {
 
 constructor() { }

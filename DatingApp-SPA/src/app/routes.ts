@@ -7,6 +7,9 @@ import { AuthGuard } from './_guards/auth.guard';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 // creating a path and ascribe a component to it
 // needed to add this in imports - app.module (RouterModule)
@@ -26,7 +29,11 @@ export const appRoutes: Routes = [
         // adding resolver class to get data before this path will be activate
         // this will save as problem with error when we still waiting for data
         // and path was already activated and can't display correctly content for user
-        { path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}  },
+        { path: 'members', component: MemberListComponent,
+         resolve: {users: MemberListResolver}  },
+        { path: 'member/edit', component: MemberEditComponent,
+         resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
+
         // we need specify route parameter, here 'id'
         // adding MemberDetailResolver class
         // { user: } accessing to data that we get from route
