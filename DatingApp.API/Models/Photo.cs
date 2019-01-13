@@ -10,6 +10,9 @@ namespace DatingApp.API.Models
         public DateTime DateAdded { get; set; }
         public bool IsMain { get; set; }
 
+        // field for cloudinary photo
+        public string PublicId { get; set; }
+
         // when we add this two field,  new created table  will have option cascade delete
         // onDelete: ReferentialAction.Cascade
         // when we delete user, photos also will be deleted

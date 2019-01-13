@@ -38,7 +38,7 @@ namespace DatingApp.API
         {
             // adding our DataContext, to have possibility use it in controllers constructor
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions( opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;});
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
 
             //needed for sharing resourses from our backend api to angular in front 
             services.AddCors(options =>
@@ -48,6 +48,10 @@ namespace DatingApp.API
                                            .AllowAnyHeader()
                                            .AllowAnyMethod());
                 });
+
+            // setting sonfiguration for claudinary
+            // value of class CloudinarySettings will gonna match with appsettings.json "ClaudinarySettings
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             //adding automapper
             services.AddAutoMapper();

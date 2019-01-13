@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/_services/auth.service';
  need to add in app.module
  need to create route path in routes.ts*/
 export class MemberEditComponent implements OnInit {
-  @ViewChild('editForm') editForm: NgForm;  // this field gives as possibility to reset form
+  @ViewChild('editForm') editForm: NgForm;  // @ViewChild decorator gives as access to reset form method
   user: User;
   /**
    * if user make any changes in form (.dirty) (editForm our form name)

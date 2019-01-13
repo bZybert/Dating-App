@@ -10,7 +10,7 @@ namespace DatingApp.API.Helpers
     {
         public AutoMapperProfiles()
         {
-            // <source and destination mapping>
+            // CreateMap<Source, Destination>();
             // if names in those two classes are same, there is no need for configuration
             CreateMap<Photo, PhotosForDetailedDto>();
 
@@ -28,7 +28,7 @@ namespace DatingApp.API.Helpers
                 opt.ResolveUsing(d => d.DateOfBirth.CalculateAge());
             });
 
-
+            // CreateMap<Source, Destination>();
             CreateMap<User, UserForDetailedDto>()
             .ForMember(dest => dest.PhotoUrl, opt =>
             {
@@ -39,9 +39,14 @@ namespace DatingApp.API.Helpers
                 // CalculateAge() our callback - custom function created in helpers/extensions
                 opt.ResolveUsing(d => d.DateOfBirth.CalculateAge());
             });
-
+            // CreateMap<Source, Destination>();
             CreateMap<UserForUpdateDto, User>();
 
+            // CreateMap<Source, Destination>();
+            CreateMap<Photo, PhotoForReturnDto>();
+
+            // CreateMap<Source, Destination>();
+            CreateMap<PhotoForCreationDto, Photo>();
 
         }
     }

@@ -94,7 +94,10 @@
               </div>
             </form>
           </tab>
-          <tab heading="Edit Photos"> <p>photo edit will be here</p> </tab>
+          <tab heading="Edit Photos">
+            <!-- we passing data to child component (collection of photos)-->
+            <app-photo-editor [photos]="user.photos"></app-photo-editor>
+          </tab>
         </tabset>
       </div>
     </div>

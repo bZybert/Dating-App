@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,17 @@ namespace DatingApp.API.Data
             // if there will be more than 0 changes then return true
             // if it's equals to 0 it means there wasn't any changes and return false
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Photo> GetPhoto(int id)
+        {
+            var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+            return photo;
+        }
+
+        public async Task<Photo> GetMainPhotoForUser(int userId)
+        {
+            return await _context.Photos.Where( u => u.UserId == userId).FirstOrDefaultAsync(p => p.IsMain);
         }
     }
 }
