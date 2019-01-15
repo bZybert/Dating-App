@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm: NgForm;  // @ViewChild decorator gives as access to reset form method
   user: User;
+  photoUrl: string;  // for display user current main photo in nav
   /**
    * if user make any changes in form (.dirty) (editForm our form name)
      and try to close page in browser
@@ -41,7 +42,7 @@ private authService: AuthService
     this.route.data.subscribe(data => {
     this.user = data['user'];  // resolver added to this path
     });
-
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   updateUser() {
@@ -55,8 +56,13 @@ private authService: AuthService
     }, error => {
       this.alertify.error(error);
     });
-
   }
+
+  updateMainPhoto(photoUrl) {
+    this.user.photoUrl = photoUrl;
+  }
+
+
   }
 
 

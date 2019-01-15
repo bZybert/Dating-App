@@ -149,15 +149,73 @@ namespace DatingApp.API.Controllers
             // find previews mainPhoto and change it to false
             var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
 
-            // set current photo as main
+            // change current photo to false
             currentMainPhoto.IsMain = false;
 
+            // set new chosen photo as main
+            photoFromRepo.IsMain = true;
+
             // save changes
-            if(await _repo.SaveAll())
-            return NoContent();
+            if (await _repo.SaveAll())
+                return NoContent();
 
             return BadRequest("Could not set photo as main");
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id)
+        {
+            /**
+                        checking if user does attempt to update profile matches the token 
+                        that the server receiving 
+                         */
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _repo.GetUser(userId);
+
+            // checking if photo 'id' what we passing in is not matching with any of user photo collection
+            if (!user.Photos.Any(p => p.Id == id))
+                return Unauthorized();
+
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            // checking if this photo is already set as main
+            if (photoFromRepo.IsMain)
+                return BadRequest("you cannot delete main photo");
+
+            // photo added randomly from user doesn't have publicId
+            if (photoFromRepo.PublicId != null)
+            {
+                // creating DeletionParams and send to it our photo.publicId
+                var deletionParams = new DeletionParams(photoFromRepo.PublicId);
+                // claudinary method for delete photo
+                // photo to delete require publicId property
+                // Destroy() require create DeletionParams parameters
+                var result = _cloudinary.Destroy(deletionParams);
+                // if delate ended successfully we should get { "result" : "ok"}
+                if (result.Result == "ok")
+                {
+                    // we delete reference to this photo from our db
+                    _repo.Delete(photoFromRepo);
+                }
+            }
+
+            // if photo doesn't have publicId - user add it randomly
+            if (photoFromRepo.PublicId == null)
+            {
+                // we delete reference to this photo from our db
+                _repo.Delete(photoFromRepo);
+            }
+
+            // save change
+            if (await _repo.SaveAll())
+                return Ok();
+
+            //if save end with fail
+            return BadRequest("Failed to delete photo");
+        }
     }
 }

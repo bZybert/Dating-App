@@ -10,18 +10,21 @@ import { Router } from '@angular/router';
 })
 export class NavComponent implements OnInit {
 model: any = {}; /**empty object */
+photoUrl: string ;
 
   constructor(
     public authService: AuthService,
-    private alerify: AlertifyService,
+    private alertify: AlertifyService,
     private route: Router) { }
 
   ngOnInit() {
+    // updating user photo displayed on nav bar when logged
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login() {
   this.authService.login(this.model).subscribe(next => {
-  this.alerify.success('Logged successfully');
+  this.alertify.success('Logged successfully');
 }, error => {
   console.log(error);
 }, () => {
@@ -37,8 +40,15 @@ loggedIn() {
 }
 
 logout() {
+  // after user logout we need to remove data from local storage
   localStorage.removeItem('token');
-  this.alerify.message('logged out');
+  localStorage.removeItem('user');
+  // also need to reset value of decodedToken and currentUser fields
+  this.authService.decodedToken = null;
+  this.authService.currentUser = null;
+  // display message to user when he logout
+  this.alertify.message('logged out');
+  // redirect user to home page
   this.route.navigate(['/home']);
 }
 }

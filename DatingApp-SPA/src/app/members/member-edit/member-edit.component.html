@@ -12,7 +12,7 @@
       <div class="card">
         <img
           class="card-img-top img-thumbnail"
-          src="{{ user.photoUrl }}"
+          src="{{ photoUrl }}"
           alt="{{ user.knownAs }}"
         />
         <div class="card-body">
@@ -95,8 +95,14 @@
             </form>
           </tab>
           <tab heading="Edit Photos">
-            <!-- we passing data to child component (collection of photos)-->
-            <app-photo-editor [photos]="user.photos"></app-photo-editor>
+            <!-- 
+              [photos]="user.photos" we passing data to child component ( this will be collection of photos)
+              (getMemberPhotoChange) data from child component
+          -->
+            <app-photo-editor
+              [photos]="user.photos"
+              (getMemberPhotoChange)="updateMainPhoto($event)"
+            ></app-photo-editor>
           </tab>
         </tabset>
       </div>

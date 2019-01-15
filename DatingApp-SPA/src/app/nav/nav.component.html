@@ -26,6 +26,10 @@
   {{authService.decodedToken?.unique_name}}  - sending to view legged user name
   ? -makes it optional, there isn't error in console when it's undefined (user logout)-->
     <div *ngIf="loggedIn()" class="dropdown" dropdown>
+      <span class="mr-1">
+        <!-- display main photo logged user-->
+        <img src="{{ photoUrl }}" alt="" />
+      </span>
       <a class="btn dropdown-toggle text-light" dropdownToggle>
         Welcome {{ authService.decodedToken?.unique_name | titlecase }}
       </a>
