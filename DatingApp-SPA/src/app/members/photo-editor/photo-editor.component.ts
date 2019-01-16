@@ -15,7 +15,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 // this is child of member-edit component
 export class PhotoEditorComponent implements OnInit {
   @Input() photos: Photo[];
-  @Output() getMemberPhotoChange = new EventEmitter<string>() ; // we will sending photo url to parent component
+  @Output() getMemberPhotoChange = new EventEmitter<string>(); // we will sending photo url to parent component
   // https://valor-software.com/ng2-file-upload/
   // ready-made file upload library
   uploader: FileUploader;
@@ -71,6 +71,18 @@ export class PhotoEditorComponent implements OnInit {
         };
         // add new photo to our photos[]
         this.photos.push(photo);
+        // if this is first photo
+        if (photo.isMain) {
+          // we sending photo.url with _service method
+          this.authService.changeMemberPhoto(photo.url);
+          // update user photoUrl with new selected photo
+          this.authService.currentUser.photoUrl = photo.url;
+          // update user in local storage to save changes
+          localStorage.setItem(
+            'user',
+            JSON.stringify(this.authService.currentUser)
+          );
+        }
       }
     };
   }
@@ -97,7 +109,10 @@ export class PhotoEditorComponent implements OnInit {
           // update user photoUrl with new selected photo
           this.authService.currentUser.photoUrl = photo.url;
           // update user in local storage to save changes
-          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+          localStorage.setItem(
+            'user',
+            JSON.stringify(this.authService.currentUser)
+          );
         },
         error => {
           this.alertify.error(error);
@@ -107,15 +122,23 @@ export class PhotoEditorComponent implements OnInit {
 
   deletePhoto(id: number) {
     // confirmation from user to delete photo
-    this.alertify.confirm('Are you sure you want to delete this photo ?', () => {
-      this.userServise.deletePhoto( this.authService.decodedToken.nameid, id).subscribe( () => {
-      // remove photo from photos array
-      // slice (start number, how many position to cut)
-      this.photos.slice(this.photos.findIndex( p => p.id === id ), 1);
-      this.alertify.success('Photo has been deleted');
-      }, error => {
-        this.alertify.error('Failed to delete photo');
-      } );
-    });
+    this.alertify.confirm(
+      'Are you sure you want to delete this photo ?',
+      () => {
+        this.userServise
+          .deletePhoto(this.authService.decodedToken.nameid, id)
+          .subscribe(
+            () => {
+              // remove photo from photos array
+              // slice (start number, how many position to cut)
+              this.photos.slice(this.photos.findIndex(p => p.id === id), 1);
+              this.alertify.success('Photo has been deleted');
+            },
+            error => {
+              this.alertify.error('Failed to delete photo');
+            }
+          );
+      }
+    );
   }
 }

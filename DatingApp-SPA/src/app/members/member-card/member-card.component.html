@@ -3,7 +3,7 @@
   <div class="card-img-wrapper">
     <img
       class="card-img-top"
-      src="{{ user.photoUrl }}"
+      src="{{ user.photoUrl || '../../../assets/user.png' }}"
       alt="{{ user.knownAs }}"
     />
     <ul class="list-inline member-icons animate text-center">
@@ -12,7 +12,9 @@
           [routerLink]="['/members/', user.id]" 
         it add user.id value   /members/5
         -->
-        <button  class="btn btn-primary" [routerLink]="['/members/', user.id]" ><i class="fa fa-user"></i></button>
+        <button class="btn btn-primary" [routerLink]="['/members/', user.id]">
+          <i class="fa fa-user"></i>
+        </button>
       </li>
       <li class="list-inline-item">
         <button class="btn btn-primary"><i class="fa fa-heart"></i></button>

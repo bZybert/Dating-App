@@ -1,10 +1,9 @@
-<div class="container mt-5">
+<div class="container mt-4">
   <div class="row">
     <!-- lg large screen, md medium screen, sm small screen-->
-    <div *ngFor="let user of users" class="col-lg-2 col-md-3 col-sm-6">
-      <!-- send user value to child component [] = "" -->
+    <div *ngFor="let user of users" class="col-lg-2 col-md-3 col-sm-6 mt-3">
+      <!-- send user value to child component [] = ""-->
       <app-member-card [user]="user"></app-member-card>
-      >
     </div>
   </div>
 </div>
