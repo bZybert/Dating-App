@@ -27,11 +27,13 @@
           </div>
           <div>
             <strong>Last Active: </strong>
-            <p>{{ user.lastActive }}</p>
+            <!-- using timeAgo pipe to calculate user activity-->
+            <p>{{ user.lastActive | timeAgo}}</p>
           </div>
           <div>
             <strong>Member since: </strong>
-            <p>{{ user.created }}</p>
+            <!-- using pipe | and build in angular type date to display it in proper format-->
+            <p>{{ user.created | date: "mediumDate" }}</p>
           </div>
           <div class="card-footer">
             <!-- if user don't make any changes in form (editForm), then button will be disabled -->

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]  // attribute for action filter (when some IActionResult method in this class will be used)
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -41,7 +43,7 @@ namespace DatingApp.API.Controllers
             return Ok(userToReturn);
         }
 
-        [HttpGet("{id}", Name ="GetUser")]  // name for authcontroller register method in return
+        [HttpGet("{id}", Name = "GetUser")]  // name for authcontroller register method in return
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _repo.GetUser(id);
